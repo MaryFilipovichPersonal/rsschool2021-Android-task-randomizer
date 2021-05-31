@@ -4,42 +4,66 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import com.rsschool.android2021.databinding.FragmentSecondBinding
+import com.rsschool.android2021.interfaces.LastResultKeeper
 
 class SecondFragment : Fragment() {
 
-    private var backButton: Button? = null
-    private var result: TextView? = null
+    //view binding
+    private var _binding: FragmentSecondBinding? = null
+    private val binding get() = _binding!!
+
+    private var onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            (requireActivity() as LastResultKeeper).lastResult = generatedValue
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
+
+    private var generatedValue = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_second, container, false)
+    ): View {
+        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        result = view.findViewById(R.id.result)
-        backButton = view.findViewById(R.id.back)
 
         val min = arguments?.getInt(MIN_VALUE_KEY) ?: 0
         val max = arguments?.getInt(MAX_VALUE_KEY) ?: 0
 
-        result?.text = generate(min, max).toString()
+        generatedValue = generate(min, max)
+        binding.result.text = generatedValue.toString()
 
-        backButton?.setOnClickListener {
-            // TODO: implement back
+        setListeners()
+    }
+
+    override fun onDestroyView() {
+        onBackPressedCallback.isEnabled = false
+        onBackPressedCallback.remove()
+        _binding = null
+        super.onDestroyView()
+    }
+
+    private fun setListeners() {
+        binding.back.setOnClickListener {
+            (requireActivity() as LastResultKeeper).lastResult = generatedValue
+            requireActivity().supportFragmentManager.popBackStack()
         }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            onBackPressedCallback
+        )
     }
 
-    private fun generate(min: Int, max: Int): Int {
-        // TODO: generate random number
-        return 0
-    }
+    private fun generate(min: Int, max: Int) = (min..max).random()
 
     companion object {
 
@@ -47,9 +71,9 @@ class SecondFragment : Fragment() {
         fun newInstance(min: Int, max: Int): SecondFragment {
             val fragment = SecondFragment()
             val args = Bundle()
-
-            // TODO: implement adding arguments
-
+            args.putInt(MIN_VALUE_KEY, min)
+            args.putInt(MAX_VALUE_KEY, max)
+            fragment.arguments = args
             return fragment
         }
 

@@ -6,10 +6,10 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/previous_result"
+        android:id="@+id/ff_tv_previous_result"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="64dp"
         android:textAlignment="center"
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,38 +17,59 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Previous result: 4" />
 
-    <EditText
-        android:id="@+id/min_value"
-        android:layout_width="200dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ff_til_min_value"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:hint="Min"
-        android:inputType="number"
-        android:textSize="20sp"
+        android:layout_marginTop="64dp"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/previous_result" />
+        app:layout_constraintTop_toBottomOf="@id/ff_tv_previous_result">
 
-    <EditText
-        android:id="@+id/max_value"
-        android:layout_width="200dp"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ff_edit_min_value"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hint_min_value"
+            android:inputType="number"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ff_til_max_value"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:hint="Max"
-        android:inputType="number"
-        android:textSize="20sp"
+        android:layout_marginTop="8dp"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/min_value" />
+        app:layout_constraintTop_toBottomOf="@id/ff_til_min_value">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ff_edit_max_value"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hint_max_value"
+            android:inputType="number"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/generate"
-        android:layout_width="200dp"
+        android:id="@+id/ff_btn_generate"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Generate"
+        android:layout_marginTop="48dp"
+        android:enabled="false"
+        android:text="@string/btn_generate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/max_value" />
-
+        app:layout_constraintTop_toBottomOf="@id/ff_til_max_value" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

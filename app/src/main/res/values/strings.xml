@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">randomizer</string>
+    <string name="previous_result">Previous result: %d</string>
+    <string name="hint_min_value">Min</string>
+    <string name="hint_max_value">Max</string>
+    <string name="btn_generate">Generate</string>
 </resources>
