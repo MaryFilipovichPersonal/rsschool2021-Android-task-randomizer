@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.rsschool.android2021.databinding.FragmentFirstBinding
 import com.rsschool.android2021.interfaces.LastResultKeeper
 import com.rsschool.android2021.interfaces.OnGenerateRandomClickListener
+import java.lang.NumberFormatException
 
 
 class FirstFragment : Fragment() {
@@ -78,35 +79,39 @@ class FirstFragment : Fragment() {
         with(binding) {
             ffTilMinValue.editText?.addTextChangedListener(object : TextWatcher {
                 override fun onTextChanged(text: CharSequence, start: Int, count: Int, after: Int) {
-                    when {
-                        text.isEmpty() -> {
-                            min = 0
-                            ffTilMinValue.error = "Minimum value is required"
-                            ffTilMinValue.isErrorEnabled = true
-                            ffBtnGenerate.isEnabled = false
-                        }
-                        text.isNotEmpty() -> {
-                            if (text.trim().toString().toLong() < Int.MAX_VALUE) {
-                                val minNum = text.trim().toString().toInt()
-                                if (minNum > max) {
-                                    min = minNum
-                                    ffTilMinValue.error = "Must be less than maximum"
-                                    ffTilMinValue.isErrorEnabled = true
-                                    ffBtnGenerate.isEnabled = false
-                                } else {
-                                    min = minNum
-                                    ffTilMinValue.isErrorEnabled = false
-                                    if (ffTilMaxValue.editText?.text?.isNotEmpty()!!) {
-                                        ffTilMaxValue.isErrorEnabled = false
-                                        ffBtnGenerate.isEnabled = true
-                                    }
-                                }
-                            } else {
-                                ffTilMinValue.error = "Should be less than Int.MAX_VALUE"
+                    try {
+                        when {
+                            text.isEmpty() -> {
+                                min = 0
+                                ffTilMinValue.error = "Minimum value is required"
                                 ffTilMinValue.isErrorEnabled = true
                                 ffBtnGenerate.isEnabled = false
                             }
+                            text.isNotEmpty() -> {
+                                if (text.trim().toString().toLong() < Int.MAX_VALUE) {
+                                    val minNum = text.trim().toString().toInt()
+                                    if (minNum < max && ffTilMaxValue.editText?.text?.trim().toString().toLong() < Int.MAX_VALUE) {
+                                        min = minNum
+                                        ffTilMinValue.isErrorEnabled = false
+                                        if (ffTilMaxValue.editText?.text?.isNotEmpty()!!) {
+                                            ffTilMaxValue.isErrorEnabled = false
+                                            ffBtnGenerate.isEnabled = true
+                                        }
+                                    } else {
+                                        min = minNum
+                                        ffTilMinValue.error = "Must be less than maximum"
+                                        ffTilMinValue.isErrorEnabled = true
+                                        ffBtnGenerate.isEnabled = false
+                                    }
+                                } else {
+                                    ffTilMinValue.error = "Should be less than ${Int.MAX_VALUE}"
+                                    ffTilMinValue.isErrorEnabled = true
+                                    ffBtnGenerate.isEnabled = false
+                                }
+                            }
                         }
+                    } catch (e: NumberFormatException) {
+
                     }
                 }
 
@@ -127,37 +132,43 @@ class FirstFragment : Fragment() {
         with(binding) {
             ffTilMaxValue.editText?.addTextChangedListener(object : TextWatcher {
                 override fun onTextChanged(text: CharSequence, start: Int, count: Int, after: Int) {
-                    when {
-                        text.isEmpty() -> {
-                            max = 0
-                            ffTilMaxValue.error = "Maximum value is required"
-                            ffTilMaxValue.isErrorEnabled = true
-                            ffBtnGenerate.isEnabled = false
-                        }
-                        text.isNotEmpty() -> {
-                            if (text.trim().toString().toLong() < Int.MAX_VALUE) {
-                                val maxNum = text.trim().toString().toInt()
-                                if (maxNum < min) {
-                                    max = maxNum
-                                    ffTilMaxValue.error = "Must be more than minimum"
-                                    ffTilMaxValue.isErrorEnabled = true
-                                    ffBtnGenerate.isEnabled = false
-                                } else {
-                                    max = maxNum
-                                    ffTilMaxValue.isErrorEnabled = false
-                                    if (ffTilMinValue.editText?.text?.isNotEmpty()!!) {
-                                        ffTilMinValue.isErrorEnabled = false
-                                        ffBtnGenerate.isEnabled = true
-                                    }
-                                }
-                            } else {
-                                ffTilMaxValue.error = "Should be less than Int.MAX_VALUE"
+                    try {
+                        when {
+                            text.isEmpty() -> {
+                                max = 0
+                                ffTilMaxValue.error = "Maximum value is required"
                                 ffTilMaxValue.isErrorEnabled = true
                                 ffBtnGenerate.isEnabled = false
                             }
-                        }
+                            text.isNotEmpty() -> {
+                                if (text.trim().toString().toLong() < Int.MAX_VALUE) {
+                                    val maxNum = text.trim().toString().toInt()
+                                    val minNum =
+                                        ffTilMinValue.editText?.text?.trim().toString().toLong()
+                                    if (maxNum > min && minNum < Int.MAX_VALUE) {
+                                        max = maxNum
+                                        ffTilMaxValue.isErrorEnabled = false
+                                        if (ffTilMinValue.editText?.text?.isNotEmpty()!!) {
+                                            ffTilMinValue.isErrorEnabled = false
+                                            ffBtnGenerate.isEnabled = true
+                                        }
+                                    } else {
+                                        max = maxNum
+                                        ffTilMaxValue.error = "Must be more than minimum"
+                                        ffTilMaxValue.isErrorEnabled = true
+                                        ffBtnGenerate.isEnabled = false
+                                    }
+                                } else {
+                                    ffTilMaxValue.error = "Should be less than ${Int.MAX_VALUE}"
+                                    ffTilMaxValue.isErrorEnabled = true
+                                    ffBtnGenerate.isEnabled = false
+                                }
+                            }
 
+                        }
+                    } catch (e: NumberFormatException) {
                     }
+
                 }
 
                 override fun beforeTextChanged(
